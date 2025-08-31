@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atualização da Ordem de Serviço #{{ order.id }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #0056b3;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        p {
+            margin-bottom: 10px;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff; /* Default blue */
+        }
+        .status-aberto { background-color: #dc3545; } /* Vermelho */
+        .status-em-andamento { background-color: #ffc107; color: #333; } /* Amarelo */
+        .status-concluido { background-color: #28a745; } /* Verde */
+        .status-aguardando-peca { background-color: #17a2b8; } /* Azul ciano */
+        .status-cancelado { background-color: #6c757d; } /* Cinza */
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.8em;
+            color: #777;
+        }
+        .details-box {
+            border: 1px solid #ddd;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Atualização da sua Ordem de Serviço na BZMDCell</h2>
+        
+        <p>Prezado(a) {{ order.client_name }},</p>
+        
+        <p>O status da sua Ordem de Serviço **#{{ order.id }}** (Equipamento: {{ order.equipment_type }} - Modelo: {{ order.equipment_model }}) foi atualizado.</p>
+        
+        <p>
+            O status anterior era: <span class="status-badge status-{{ old_status.lower().replace(' ', '-') }}">{{ old_status }}</span>
+            <br>
+            O novo status é: <span class="status-badge status-{{ new_status.lower().replace(' ', '-') }}">{{ new_status }}</span>
+        </p>
+        
+        <div class="details-box">
+            <p><strong>Informações Adicionais:</strong></p>
+            <p>{{ message_content|replace('\n', '<br>')|safe }}</p>
+        </div>
+
+        {% if order.service_value is not none %}
+            <p><strong>Valor do Serviço:</strong> R$ {{ "%.2f"|format(order.service_value) }}</p>
+        {% endif %}
+
+        {% if order.solution_applied %}
+            <p><strong>Solução Aplicada:</strong> {{ order.solution_applied }}</p>
+        {% endif %}
+        
+        <p>Você pode acompanhar o status da sua OS a qualquer momento através do nosso sistema.</p>
+        <p>Agradecemos a sua confiança!</p>
+        
+        <div class="footer">
+            <p>Atenciosamente,</p>
+            <p>Equipe BZMDCell</p>
+            <p><a href="{{ url_for('index', _external=True) }}">Acesse nosso sistema</a></p>
+            <p>Este é um e-mail automático, por favor, não responda.</p>
+        </div>
+    </div>
+</body>
+</html>

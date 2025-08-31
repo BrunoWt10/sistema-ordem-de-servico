@@ -1,0 +1,9 @@
+<div class="mb-3">
+    {{ form.phone.label(class="form-label") }}
+    {{ form.phone(class="form-control", placeholder="+5511987654321") }}
+    {% if form.phone.errors %}
+        {% for error in form.phone.errors %}
+            <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+    {% endif %}
+</div>

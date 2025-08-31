@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1>Bem-vindo, {{ current_user.username }}!</h1>
+        <p class="lead">Este é o painel de controle do sistema de Ordem de Serviço da BZMDCell.</p>
+        <hr>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-list-alt"></i> Ordens de Serviço Recentes
+            </div>
+            <div class="card-body">
+                {% if recent_orders %}
+                    <ul class="list-group list-group-flush">
+                        {% for order in recent_orders %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <a href="{{ url_for('view_os', order_id=order.id) }}">OS #{{ order.id }} - {{ order.client_name }}</a>
+                                    <br>
+                                    <small class="text-muted">{{ order.equipment_type }} ({{ order.equipment_model }})</small>
+                                </div>
+                                <span class="badge bg-primary rounded-pill">{{ order.status }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-center text-muted">Nenhuma Ordem de Serviço recente.</p>
+                {% endif %}
+                <div class="mt-3 text-center">
+                    <a href="{{ url_for('list_os') }}" class="btn btn-outline-primary btn-sm">Ver Todas as OSs</a>
+                    <a href="{{ url_for('create_os') }}" class="btn btn-primary btn-sm ms-2">Criar Nova OS</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-info-circle"></i> Informações Rápidas
+            </div>
+            <div class="card-body">
+                <p><strong>Total de OSs:</strong> {{ order_count if order_count is defined else 'N/A' }}</p>
+                <p><strong>OSs Abertas:</strong> {{ open_orders_count if open_orders_count is defined else 'N/A' }}</p>
+                <p><strong>Usuários Registrados:</strong> {{ user_count if user_count is defined else 'N/A' }}</p>
+                <p>Para mais detalhes, use os menus de navegação acima.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

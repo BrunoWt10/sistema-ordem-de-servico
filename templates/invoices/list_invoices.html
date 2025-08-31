@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Gerenciar Faturas</h2> {# Ajustado o título para ser mais claro #}
+        {# REMOVIDO: <a href="{{ url_for('create_invoice') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Nova Nota</a> #}
+        {# A criação de faturas é feita a partir de uma Ordem de Serviço específica. #}
+    </div>
+
+    {% if invoices %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID Fatura</th>
+                    <th>OS #</th>
+                    <th>Cliente</th>
+                    <th>Serviço</th>
+                    <th>Valor</th>
+                    <th>Data Emissão</th>
+                    <th>Vencimento</th>
+                    <th>Status Pagamento</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for invoice in invoices %}
+                <tr>
+                    <td>{{ invoice.id }}</td>
+                    <td>
+                        {% if invoice.os %}
+                            <a href="{{ url_for('view_os', os_id=invoice.os.id) }}">#{{ invoice.os.id }}</a>
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if invoice.os and invoice.os.client %}
+                            {{ invoice.os.client.name }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if invoice.os and invoice.os.service %}
+                            {{ invoice.os.service.name }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                    <td>R$ {{ "%.2f"|format(invoice.total_amount) }}</td>
+                    <td>{{ invoice.issue_date.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td>{{ invoice.due_date.strftime('%d/%m/%Y') if invoice.due_date else 'N/A' }}</td>
+                    <td>
+                        <span class="badge 
+                            {% if invoice.payment_status == 'Pendente' %}bg-warning text-dark{% elif invoice.payment_status == 'Pago' %}bg-success{% elif invoice.payment_status == 'Atrasado' %}bg-danger{% elif invoice.payment_status == 'Parcial' %}bg-info{% endif %}">
+                            {{ invoice.payment_status }}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('view_invoice', invoice_id=invoice.id) }}" class="btn btn-info btn-sm" title="Ver Fatura"><i class="fas fa-eye"></i></a>
+                        <a href="{{ url_for('edit_invoice', invoice_id=invoice.id) }}" class="btn btn-warning btn-sm" title="Editar Fatura"><i class="fas fa-edit"></i></a>
+                        <a href="{{ url_for('print_invoice', invoice_id=invoice.id) }}" target="_blank" class="btn btn-dark btn-sm" title="Imprimir Fatura"><i class="fas fa-print"></i></a>
+                        <form action="{{ url_for('delete_invoice', invoice_id=invoice.id) }}" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-danger btn-sm" title="Deletar Fatura" onclick="return confirm('Tem certeza que deseja deletar a fatura #{{ invoice.id }}? Esta ação é irreversível.')"><i class="fas fa-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        Nenhuma fatura encontrada. Crie uma fatura a partir de uma Ordem de Serviço.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                {# CORREÇÃO AQUI: de 'order.id' para 'os_entry.id' #}
+                Detalhes da Ordem de Serviço #{{ os_entry.id }}
+                <div>
+                    {# CORREÇÃO AQUI: de 'order_id=order.id' para 'os_id=os_entry.id' #}
+                    <a href="{{ url_for('edit_os', os_id=os_entry.id) }}" class="btn btn-warning btn-sm me-2">
+                        <i class="fas fa-edit"></i> Editar OS
+                    </a>
+                    {# CORREÇÃO AQUI: de 'order_id=order.id' para 'os_id=os_entry.id' #}
+                    <a href="{{ url_for('print_os_note', os_id=os_entry.id) }}" target="_blank" class="btn btn-info btn-sm me-2 no-print">
+                        <i class="fas fa-print"></i> Imprimir Nota
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <p><strong>Cliente:</strong> {{ os_entry.client.name }}</p>
+                        <p><strong>Telefone do Cliente:</strong> {{ os_entry.client.phone }}</p>
+                        <p><strong>Email do Cliente:</strong> {% if os_entry.client.email %}{{ os_entry.client.email }}{% else %}N/A{% endif %}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Serviço:</strong> {{ os_entry.service.name }}</p>
+                        <p><strong>Descrição do Serviço:</strong> {{ os_entry.service.description }}</p>
+                        <p><strong>Preço do Serviço:</strong> R$ {{ "%.2f"|format(os_entry.service.price) if os_entry.service.price else 'N/A' }}</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <p><strong>Descrição da OS:</strong> {{ os_entry.description }}</p>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <p><strong>Status:</strong> <span class="badge 
+                            {% if os_entry.status == 'Aberta' %}bg-info{% elif os_entry.status == 'Em Andamento' %}bg-primary{% elif os_entry.status == 'Aguardando Peças' %}bg-warning text-dark{% elif os_entry.status == 'Aguardando Aprovação' %}bg-secondary{% elif os_entry.status == 'Concluída' %}bg-success{% elif os_entry.status == 'Cancelada' %}bg-danger{% endif %}">
+                                {{ os_entry.status }}
+                            </span>
+                        </p>
+                        <p><strong>Prioridade:</strong> {{ os_entry.priority }}</p>
+                        <p><strong>Data de Conclusão Prevista:</strong> {% if os_entry.completion_date %}{{ os_entry.completion_date.strftime('%d/%m/%Y') }}{% else %}Não definida{% endif %}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Criada por:</strong> {{ os_entry.author.username }}</p>
+                        <p><strong>Criada em:</strong> {{ os_entry.created_at.strftime('%d/%m/%Y %H:%M') }}</p>
+                        <p><strong>Última Atualização:</strong> {{ os_entry.updated_at.strftime('%d/%m/%Y %H:%M') }}</p>
+                        <p><strong>Atribuída a:</strong> {% if os_entry.assigned_to %}{{ os_entry.assigned_to.username }}{% else %}Não atribuído{% endif %}</p>
+                    </div>
+                </div>
+                {% if os_entry.notes %}
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <p><strong>Observações Internas:</strong></p>
+                            <div class="card bg-light p-3">
+                                <p class="mb-0">{{ os_entry.notes }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <hr>
+                <div class="text-center">
+                    {% if not os_entry.invoice %}
+                        <a href="{{ url_for('create_invoice', os_id=os_entry.id) }}" class="btn btn-success mt-3">Gerar Fatura para esta OS</a>
+                    {% else %}
+                        <p class="mt-3">Esta OS já possui uma fatura associada:</p>
+                        <a href="{{ url_for('view_invoice', invoice_id=os_entry.invoice.id) }}" class="btn btn-secondary mt-1">Ver Fatura #{{ os_entry.invoice.id }}</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

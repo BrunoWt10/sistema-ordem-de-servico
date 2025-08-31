@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bem-vindo(a) ao BZMDCell!</title>
+</head>
+<body>
+    <p>Olá {{ user.username }},</p>
+    <p>Seja muito bem-vindo(a) ao sistema de Gerenciamento de Ordens de Serviço BZMDCell!</p>
+    <p>Sua conta foi criada com sucesso.</p>
+    <p>Você pode acessar sua conta aqui: <a href="{{ url_for('login', _external=True) }}">Fazer Login</a></p>
+    <br>
+    <p>Atenciosamente,</p>
+    <p>Equipe BZMDCell</p>
+</body>
+</html>

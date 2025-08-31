@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card mt-4">
+            <div class="card-header text-center">
+                <h3>Editar Nota #{{ invoice.id }}</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('edit_invoice', invoice_id=invoice.id) }}">
+                    {{ form.hidden_tag() }}
+                    
+                    {# Exibe o cliente da OS associada (não editável aqui) #}
+                    <div class="mb-3">
+                        <label class="form-label">Cliente da OS</label>
+                        <p class="form-control-plaintext">{% if invoice.os and invoice.os.client %}{{ invoice.os.client.name }}{% else %}N/A{% endif %}</p>
+                    </div>
+
+                    {# Campos adicionados/ajustados na InvoiceForm #}
+                    <div class="mb-3">
+                        {{ form.invoice_type.label(class="form-label") }}
+                        {{ form.invoice_type(class="form-select") }}
+                        {% for error in form.invoice_type.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.item_description.label(class="form-label") }}
+                        {{ form.item_description(class="form-control", rows=3) }}
+                        {% for error in form.item_description.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.amount.label(class="form-label") }}
+                        {{ form.amount(class="form-control", placeholder="Ex: 150.00") }}
+                        {% for error in form.amount.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.due_date.label(class="form-label") }}
+                        {{ form.due_date(class="form-control", placeholder="DD/MM/AAAA") }}
+                        {% for error in form.due_date.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.status.label(class="form-label") }}
+                        {{ form.status(class="form-select") }}
+                        {% for error in form.status.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    
+                    {# Campos que já estavam no InvoiceForm e no template #}
+                    <div class="mb-3">
+                        {{ form.issue_date.label(class="form-label") }}
+                        {{ form.issue_date(class="form-control") }}
+                        {% for error in form.issue_date.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.total_amount.label(class="form-label") }}
+                        {{ form.total_amount(class="form-control", placeholder="Ex: 150.00") }}
+                        {% for error in form.total_amount.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.payment_status.label(class="form-label") }}
+                        {{ form.payment_status(class="form-select") }}
+                        {% for error in form.payment_status.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.notes.label(class="form-label") }}
+                        {{ form.notes(class="form-control", rows=3) }}
+                        {% for error in form.notes.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

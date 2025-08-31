@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="card-title mb-0">Novo Cliente</h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="{{ url_for('create_client') }}">
+                            {{ form.hidden_tag() }}
+                            <div class="mb-3">
+                                {{ form.name.label(class="form-label") }}
+                                {{ form.name(class="form-control", placeholder="Nome completo do cliente") }}
+                                {% for error in form.name.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.email.label(class="form-label") }}
+                                {{ form.email(class="form-control", placeholder="email@exemplo.com") }}
+                                {% for error in form.email.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.phone.label(class="form-label") }}
+                                {{ form.phone(class="form-control", placeholder="+5511987654321") }}
+                                {% for error in form.phone.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                                <small class="form-text text-muted">Use o formato internacional, ex: +5511987654321</small>
+                            </div>
+                            <div class="mb-3">
+                                {{ form.address.label(class="form-label") }}
+                                {{ form.address(class="form-control", rows="3", placeholder="Rua, Número, Bairro, Cidade, Estado, CEP") }}
+                                {% for error in form.address.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            <div class="d-grid gap-2">
+                                {{ form.submit(class="btn btn-primary") }}
+                                <a href="{{ url_for('list_clients') }}" class="btn btn-secondary mt-2">Cancelar</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

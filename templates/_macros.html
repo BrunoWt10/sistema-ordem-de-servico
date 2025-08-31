@@ -1,0 +1,47 @@
+{% macro render_field(field) %}
+    <div class="form-group">
+        {{ field.label(class="form-control-label") }}
+        {% if field.type == 'SubmitField' %}
+            {{ field(class="btn btn-primary") }}
+        {% elif field.type == 'PasswordField' %}
+            {{ field(class="form-control") }}
+        {% elif field.type == 'TextAreaField' %}
+            {{ field(class="form-control") }}
+        {% elif field.type == 'SelectField' %}
+            {{ field(class="form-control") }}
+        {% elif field.type == 'SelectMultipleField' %}
+            {{ field(class="form-control") }}
+        {% elif field.type == 'DateField' %}
+            {{ field(class="form-control") }}
+        {% elif field.type == 'DecimalField' %}
+            {{ field(class="form-control") }}
+        {% elif field.type == 'BooleanField' %}
+            <div class="form-check">
+                {{ field(class="form-check-input") }}
+                {{ field.label(class="form-check-label") }}
+            </div>
+        {% else %}
+            {{ field(class="form-control") }}
+        {% endif %}
+        {% if field.errors %}
+            <div class="invalid-feedback d-block">
+                {% for error in field.errors %}
+                    <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro render_messages(messages) %}
+    {% with messages = messages %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+{% endmacro %}

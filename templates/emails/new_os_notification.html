@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nova Ordem de Serviço Criada!</title>
+</head>
+<body>
+    <p>Olá {{ client.name }},</p>
+    <p>Uma nova Ordem de Serviço foi criada para você no sistema BZMDCell!</p>
+    <p><strong>Número da OS:</strong> #{{ os.id }}</p>
+    <p><strong>Descrição do Serviço:</strong> {{ os.description }}</p>
+    <p><strong>Status Inicial:</strong> {{ os.status }}</p>
+    <p><strong>Criada por:</strong> {{ creator.username }}</p>
+    <br>
+    <p>Você pode acompanhar o progresso da sua OS acessando: <a href="{{ url_for('view_os', os_id=os.id, _external=True) }}">Ver Detalhes da OS</a></p>
+    <br>
+    <p>Atenciosamente,</p>
+    <p>Equipe BZMDCell</p>
+</body>
+</html>

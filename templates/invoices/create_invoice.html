@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Criar Fatura{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card mt-4">
+            <div class="card-header text-center">
+                <h3>Criar Fatura para OS #{{ os_entry.id }}</h3>
+                <p>Cliente: <strong>{{ os_entry.client.name }}</strong> | Serviço: <strong>{{ os_entry.service.name }}</strong></p>
+            </div>
+            <div class="card-body">
+                {# CORREÇÃO AQUI: Passando os_id para a ação do formulário #}
+                <form method="POST" action="{{ url_for('create_invoice', os_id=os_entry.id) }}">
+                    {{ form.hidden_tag() }}
+                    {# Removido o campo client_id, pois a fatura é criada a partir de uma OS específica #}
+                    {# O os_id já está sendo passado na URL e tratado no backend #}
+                    <div class="mb-3">
+                        {{ form.issue_date.label(class="form-label") }}
+                        {{ form.issue_date(class="form-control") }}
+                        {% for error in form.issue_date.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.total_amount.label(class="form-label") }}
+                        {{ form.total_amount(class="form-control") }}
+                        {% for error in form.total_amount.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.payment_status.label(class="form-label") }}
+                        {{ form.payment_status(class="form-select") }}
+                        {% for error in form.payment_status.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.notes.label(class="form-label") }}
+                        {{ form.notes(class="form-control", rows=3) }}
+                        {% for error in form.notes.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Salvar Fatura</button>
+                    <a href="{{ url_for('view_os', os_id=os_entry.id) }}" class="btn btn-secondary">Voltar para OS</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Atualização de Status da Ordem de Serviço</title>
+</head>
+<body>
+    <p>Prezado(a) {{ client.name }},</p>
+    <p>Informamos que o status da sua Ordem de Serviço **#{{ os.id }}** foi atualizado.</p>
+    <p><strong>Descrição:</strong> {{ os.description }}</p>
+    <p><strong>Novo Status:</strong> {{ os.status }}</p>
+    {% if os.completion_date %}
+    <p><strong>Previsão de Conclusão:</strong> {{ os.completion_date.strftime('%d/%m/%Y') }}</p>
+    {% endif %}
+    {% if os.notes %}
+    <p><strong>Observações:</strong> {{ os.notes }}</p>
+    {% endif %}
+    <br>
+    <p>Você pode visualizar os detalhes da OS aqui: <a href="{{ url_for('view_os', os_id=os.id, _external=True) }}">Ver Detalhes da OS</a></p>
+    <br>
+    <p>Se tiver alguma dúvida, entre em contato conosco.</p>
+    <br>
+    <p>Atenciosamente,</p>
+    <p>Equipe BZMDCell</p>
+</body>
+</html>

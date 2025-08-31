@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OS Desatribuída</title>
+</head>
+<body>
+    <p>Olá {{ user.username }},</p>
+    <p>A Ordem de Serviço #{{ os.id }} (Cliente: {{ os.client.name }}, Serviço: {{ os.service.name }}) não está mais atribuída a você.</p>
+    <p>O status atual da OS é: <strong>{{ os.status }}</strong>.</p>
+    <p>Detalhes da OS:</p>
+    <ul>
+        <li>Descrição: {{ os.description }}</li>
+        <li>Criada em: {{ os.created_at.strftime('%d/%m/%Y %H:%M') }}</li>
+    </ul>
+    <p>Atenciosamente,</p>
+    <p>Sua Equipe BZMDCell OS</p>
+</body>
+</html>
